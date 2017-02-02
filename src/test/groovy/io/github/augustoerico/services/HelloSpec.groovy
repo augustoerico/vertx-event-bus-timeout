@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 class HelloSpec extends Specification {
 
     @Shared
-            Vertx vertx
+    Vertx vertx
 
     def setupSpec() {
 
