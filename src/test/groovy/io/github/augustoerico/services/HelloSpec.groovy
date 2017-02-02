@@ -32,8 +32,11 @@ class HelloSpec extends Specification {
     def 'Should say hello'() {
         def vars = new BlockingVariables(5, TimeUnit.SECONDS)
 
+        given:
+        def successFn = { vars.success = true }
+
         when:
-        Hello.create(vertx).sayHello('Erico')
+        Hello.create(vertx).sayHello('Erico', successFn)
 
         then:
         vars.success

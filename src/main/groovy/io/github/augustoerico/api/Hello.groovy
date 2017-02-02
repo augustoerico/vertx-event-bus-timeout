@@ -15,12 +15,13 @@ class Hello {
         new Hello(vertx)
     }
 
-    def sayHello(String name) {
+    def sayHello(String name, Closure successFn) {
         def message = "Hello, $name".toString()
         println 'Sending message to event bus'
         vertx.eventBus().send(Channel.HELLO.name(), message, { Future reply ->
             if (reply.succeeded()) {
                 println 'Succeded'
+                successFn()
             } else {
                 def cause = reply.cause()
                 println cause.message

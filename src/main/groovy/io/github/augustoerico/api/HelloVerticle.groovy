@@ -28,6 +28,7 @@ class HelloVerticle extends AbstractVerticle {
 
     def helloHandler = { Message message ->
         println message.body()
+        message.reply('Done')
     }
 
 }
