@@ -6,6 +6,8 @@ import io.vertx.core.Future
 import io.vertx.groovy.core.Vertx
 import io.vertx.groovy.core.eventbus.Message
 
+import java.text.SimpleDateFormat
+
 class HelloVerticle extends AbstractVerticle {
 
     void start(Future<Void> future) {
@@ -23,9 +25,9 @@ class HelloVerticle extends AbstractVerticle {
     }
 
     def helloHandler = { Message message ->
-        println message.body()
-        Thread.sleep(30000)
-        message.reply('Done')
+        def name = message.body()
+        def now = new SimpleDateFormat().format(new Date())
+        message.reply("Hello, $name at $now".toString())
     }
 
 }

@@ -16,12 +16,12 @@ class Hello {
     }
 
     def sayHello(String name, Closure successFn) {
-        def message = "Hello, $name".toString()
         println 'Sending message to event bus'
-        vertx.eventBus().send(Channel.HELLO.name(), message, { Future reply ->
+        vertx.eventBus().send(Channel.HELLO.name(), name, { Future reply ->
             if (reply.succeeded()) {
+                def result = reply.result()
                 println 'Success'
-                successFn()
+                successFn(result)
             } else {
                 def cause = reply.cause()
                 println cause.message

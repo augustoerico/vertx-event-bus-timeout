@@ -6,6 +6,8 @@ import io.vertx.core.Handler
 import io.vertx.groovy.core.Vertx
 import io.vertx.groovy.core.eventbus.Message
 
+import java.text.SimpleDateFormat
+
 class ByeVerticle extends AbstractVerticle {
 
     void start(Future future) {
@@ -23,8 +25,9 @@ class ByeVerticle extends AbstractVerticle {
     }
 
     def byeHandler = { Message message ->
-        println message.body()
-        message.reply('Done')
+        def name = message.body()
+        def now = new SimpleDateFormat().format(new Date())
+        message.reply("Bye, $name at $now".toString())
     }
 
 }
