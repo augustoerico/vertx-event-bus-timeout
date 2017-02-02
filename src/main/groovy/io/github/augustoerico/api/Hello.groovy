@@ -20,7 +20,7 @@ class Hello {
         println 'Sending message to event bus'
         vertx.eventBus().send(Channel.HELLO.name(), message, { Future reply ->
             if (reply.succeeded()) {
-                println 'Succeded'
+                println 'Success'
                 successFn()
             } else {
                 def cause = reply.cause()

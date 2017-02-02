@@ -10,6 +10,5 @@ repositories {
 dependencies {
     compile 'io.vertx:vertx-lang-groovy:3.3.3'
     compile 'org.codehaus.groovy:groovy-all:2.4.6'
-    compile 'com.jetdrone:mod-bson-io:2.0.0'
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
 }

@@ -36,7 +36,7 @@ class ByeSpec extends Specification {
         def successFn = { vars.success = true }
 
         when:
-        Bye.create(vertx).sayHello('Erico', successFn)
+        Bye.create(vertx).sayBye('Erico', successFn)
 
         then:
         vars.success

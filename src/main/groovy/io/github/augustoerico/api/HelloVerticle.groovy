@@ -8,16 +8,12 @@ import io.vertx.groovy.core.eventbus.Message
 
 class HelloVerticle extends AbstractVerticle {
 
-    def consumers
-
     void start(Future<Void> future) {
-        println 'Starting hello Verticle'
+        println 'Starting Hello Verticle'
 
         def gVertx = new Vertx(vertx)
 
-        consumers = [
-                registerConsumer(gVertx, Channel.HELLO.name(), helloHandler)
-        ]
+        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler)
 
         future.complete()
     }
