@@ -12,6 +12,8 @@ class HelloVerticle extends AbstractVerticle {
 
     void start(Future<Void> future) {
         println 'Starting Hello Verticle'
+        def threadId = Thread.currentThread().id
+        println "HelloVerticle.start: $threadId"
 
         def gVertx = new Vertx(vertx)
 
@@ -27,8 +29,10 @@ class HelloVerticle extends AbstractVerticle {
     def helloHandler = { Message message ->
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
+        def threadId = Thread.currentThread().id
+        println "HelloVerticle.helloHandler: $threadId"
         def random = new Random().nextInt(10)
-        if (random < 5) {
+        if (random < 2) {
             println 'Doing intense calculation'
             Thread.sleep(180000)
         }

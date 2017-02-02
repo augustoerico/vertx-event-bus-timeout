@@ -14,6 +14,8 @@ class ByeVerticle extends AbstractVerticle {
         println 'Starting Bye Verticle'
 
         def gVertx = new Vertx(vertx)
+        def threadId = Thread.currentThread().id
+        println "ByeVerticle.start: $threadId"
 
         registerConsumer(gVertx, Channel.BYE.name(), byeHandler)
 
@@ -27,6 +29,8 @@ class ByeVerticle extends AbstractVerticle {
     def byeHandler = { Message message ->
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
+        def threadId = Thread.currentThread().id
+        println "ByeVerticle.byeHandler: $threadId"
         message.reply("Bye, $name at $now".toString())
     }
 
