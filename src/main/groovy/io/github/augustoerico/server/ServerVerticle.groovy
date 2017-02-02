@@ -10,7 +10,7 @@ class ServerVerticle extends AbstractVerticle {
 
     void start(Future future) {
         Vertx gVertx = new Vertx(vertx)
-        gVertx.deployVerticle(HelloVerticle.name, {
+        gVertx.deployVerticle(HelloVerticle.name, [worker: true], {
             gVertx.deployVerticle(ByeVerticle.name, {
                 println 'Verticles deployed'
                 future.complete()

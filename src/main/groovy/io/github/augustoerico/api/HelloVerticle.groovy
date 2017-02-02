@@ -27,6 +27,11 @@ class HelloVerticle extends AbstractVerticle {
     def helloHandler = { Message message ->
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
+        def random = new Random().nextInt(10)
+        if (random < 5) {
+            println 'Doing intense calculation'
+            Thread.sleep(180000)
+        }
         message.reply("Hello, $name at $now".toString())
     }
 
