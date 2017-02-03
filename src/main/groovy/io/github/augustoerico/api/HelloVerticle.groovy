@@ -1,8 +1,8 @@
 package io.github.augustoerico.api
 
 import io.vertx.core.AbstractVerticle
-import io.vertx.core.Handler
 import io.vertx.core.Future
+import io.vertx.core.Handler
 import io.vertx.groovy.core.Vertx
 import io.vertx.groovy.core.eventbus.Message
 
@@ -17,7 +17,7 @@ class HelloVerticle extends AbstractVerticle {
 
         def gVertx = new Vertx(vertx)
 
-        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler)
+        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler.curry(gVertx))
 
         future.complete()
     }
@@ -26,7 +26,7 @@ class HelloVerticle extends AbstractVerticle {
         vertx.eventBus().consumer(consumerName, handler)
     }
 
-    def helloHandler = { Message message ->
+    def helloHandler = { Vertx vertx, Message message ->
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
         def threadId = Thread.currentThread().id
@@ -34,7 +34,8 @@ class HelloVerticle extends AbstractVerticle {
         def random = new Random().nextInt(10)
         if (random < 2) {
             println 'Doing intense calculation'
-            Thread.sleep(180000)
+            Thread.sleep(1000)
+            throw new Exception('AEHOOO')
         }
         message.reply("Hello, $name at $now".toString())
     }

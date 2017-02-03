@@ -15,9 +15,19 @@ class Hello {
         new Hello(vertx)
     }
 
-    def sayHello(String name, Closure successFn) {
+    def sayHello(String name, Closure successFn, Closure failureFn = { }) {
         println 'Sending message to event bus'
-        vertx.eventBus().send(Channel.HELLO.name(), name, { Future reply ->
+        vertx.exceptionHandler({ Throwable ex ->
+            println '''
+
+                VERTX exception handler
+
+            '''
+            println ex.cause
+            failureFn(ex.cause.message)
+        }).eventBus().send(Channel.HELLO.name(), name, { Future reply ->
+            def threadId = Thread.currentThread().id
+            println "Hello.sayHello: $threadId"
             if (reply.succeeded()) {
                 def result = reply.result()
                 println 'Success'
@@ -25,6 +35,8 @@ class Hello {
             } else {
                 def cause = reply.cause()
                 println cause.message
+                println 'Exception on event bus timeout'
+                failureFn(cause.message)
             }
         })
     }

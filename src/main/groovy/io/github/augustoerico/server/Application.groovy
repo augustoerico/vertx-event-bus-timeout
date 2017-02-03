@@ -23,7 +23,11 @@ class Application {
                 def response = context.response()
                 response.putHeader('content-type', 'text/plain')
 
-                Hello.create(vertx).sayHello('Erico', { Message message -> response.end(message.body()) })
+                Hello.create(vertx).sayHello('Erico', { Message message ->
+                    response.end(message.body())
+                }, { message ->
+                    response.setStatusCode(503).end(message)
+                })
             })
 
             router.route('/bye').handler({ RoutingContext context ->
