@@ -40,7 +40,7 @@ class HelloVerticle extends AbstractVerticle {
                 println 'Stopping thread'
                 if (thread && !thread.interrupted) {
                     thread.interrupt()
-                    message.fail(503, 'FAILED AS ALL YOUR DREAMS')
+                    message.fail(503, 'Thread interrupted: taking too long')
                 }
             }
         }
