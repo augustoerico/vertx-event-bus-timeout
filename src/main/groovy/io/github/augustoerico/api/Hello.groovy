@@ -17,15 +17,7 @@ class Hello {
 
     def sayHello(String name, Closure successFn, Closure failureFn = { }) {
         println 'Sending message to event bus'
-        vertx.exceptionHandler({ Throwable ex ->
-            println '''
-
-                VERTX exception handler
-
-            '''
-            println ex.cause
-            failureFn(ex.cause.message)
-        }).eventBus().send(Channel.HELLO.name(), name, { Future reply ->
+        vertx.eventBus().send(Channel.HELLO.name(), name, { Future reply ->
             def threadId = Thread.currentThread().id
             println "Hello.sayHello: $threadId"
             if (reply.succeeded()) {

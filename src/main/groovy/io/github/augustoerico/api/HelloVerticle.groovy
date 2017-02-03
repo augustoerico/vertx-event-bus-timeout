@@ -19,9 +19,7 @@ class HelloVerticle extends AbstractVerticle {
 
         def gVertx = new Vertx(vertx)
 
-        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler).exceptionHandler({
-            println 'JIAJDIAJIDAISJDIASJIDASIJDAI'
-        })
+        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler)
 
         future.complete()
     }
@@ -62,9 +60,7 @@ class HelloVerticle extends AbstractVerticle {
             timer.purge()
             message.reply("Hello, $name at $now".toString())
         } catch(Exception e) {
-            println 'qwerqwerqwerqwerqwerqwerqw'
             e.printStackTrace()
-//            message.fail(503, 'FAILED AS ALL YOUR DREAMS')
         }
     }
 
