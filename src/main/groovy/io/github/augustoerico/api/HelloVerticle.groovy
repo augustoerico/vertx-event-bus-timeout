@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat
 
 class HelloVerticle extends AbstractVerticle {
 
+    Thread thread
+
     void start(Future<Void> future) {
         println 'Starting Hello Verticle'
         def threadId = Thread.currentThread().id
@@ -17,7 +19,9 @@ class HelloVerticle extends AbstractVerticle {
 
         def gVertx = new Vertx(vertx)
 
-        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler.curry(gVertx))
+        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler).exceptionHandler({
+            println 'JIAJDIAJIDAISJDIASJIDASIJDAI'
+        })
 
         future.complete()
     }
@@ -26,18 +30,42 @@ class HelloVerticle extends AbstractVerticle {
         vertx.eventBus().consumer(consumerName, handler)
     }
 
-    def helloHandler = { Vertx vertx, Message message ->
+    def helloHandler = { Message message ->
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
-        def threadId = Thread.currentThread().id
-        println "HelloVerticle.helloHandler: $threadId"
-        def random = new Random().nextInt(10)
-        if (random < 2) {
-            println 'Doing intense calculation'
-            Thread.sleep(1000)
-            throw new Exception('AEHOOO')
+        this.thread = Thread.currentThread()
+        println "HelloVerticle.helloHandler: $thread.id"
+
+        def task = new TimerTask() {
+            @Override
+            void run() {
+                println 'Stopping thread'
+                if (thread && !thread.interrupted) {
+                    thread.interrupt()
+                    message.fail(503, 'FAILED AS ALL YOUR DREAMS')
+                }
+            }
         }
-        message.reply("Hello, $name at $now".toString())
+
+        println 'Starting timer'
+        Timer timer = new Timer()
+        timer.schedule(task, 3000)
+
+        try {
+            def random = new Random().nextInt(10)
+            if (random < 2) {
+                println 'Doing intense calculation'
+                Thread.sleep(65000)
+            }
+            println 'Cancelling timer'
+            timer.cancel()
+            timer.purge()
+            message.reply("Hello, $name at $now".toString())
+        } catch(Exception e) {
+            println 'qwerqwerqwerqwerqwerqwerqw'
+            e.printStackTrace()
+//            message.fail(503, 'FAILED AS ALL YOUR DREAMS')
+        }
     }
 
 }
