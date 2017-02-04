@@ -13,13 +13,14 @@ class HelloVerticle extends AbstractVerticle {
     Thread thread
 
     void start(Future<Void> future) {
-        println 'Starting Hello Verticle'
-        def threadId = Thread.currentThread().id
-        println "HelloVerticle.start: $threadId"
+        def thread = Thread.currentThread()
+        println "HelloVerticle.start: $thread.id | $thread.name"
 
-        def gVertx = new Vertx(vertx)
-
-        registerConsumer(gVertx, Channel.HELLO.name(), helloHandler)
+        registerConsumer(
+                new Vertx(vertx),
+                Channel.HELLO.name(),
+                helloHandler
+        )
 
         future.complete()
     }
@@ -29,39 +30,16 @@ class HelloVerticle extends AbstractVerticle {
     }
 
     def helloHandler = { Message message ->
-        def name = message.body()
-        def now = new SimpleDateFormat().format(new Date())
         this.thread = Thread.currentThread()
         println "HelloVerticle.helloHandler: $thread.id"
 
-        def task = new TimerTask() {
-            @Override
-            void run() {
-                println 'Stopping thread'
-                if (thread && !thread.interrupted) {
-                    thread.interrupt()
-                    message.fail(503, 'Thread interrupted: taking too long')
-                }
-            }
-        }
+        def name = message.body()
+        def now = new SimpleDateFormat().format(new Date())
 
-        println 'Starting timer'
-        Timer timer = new Timer()
-        timer.schedule(task, 3000)
+        // Let's pretend it is a resource hunger operation that takes up to 1s
+        Thread.sleep(new Random().nextInt(10) * 100)
 
-        try {
-            def random = new Random().nextInt(10)
-            if (random < 2) {
-                println 'Doing intense calculation'
-                Thread.sleep(65000)
-            }
-            println 'Cancelling timer'
-            timer.cancel()
-            timer.purge()
-            message.reply("Hello, $name at $now".toString())
-        } catch(Exception e) {
-            e.printStackTrace()
-        }
+        message.reply("Hello, $name at $now".toString())
     }
 
 }

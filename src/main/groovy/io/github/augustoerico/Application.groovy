@@ -2,7 +2,8 @@ package io.github.augustoerico
 
 import io.github.augustoerico.handlers.ByeHandler
 import io.github.augustoerico.handlers.HelloHandler
-import io.github.augustoerico.verticles.ServerVerticle
+import io.github.augustoerico.verticles.ByeVerticle
+import io.github.augustoerico.verticles.HelloVerticle
 import io.vertx.groovy.core.Vertx
 import io.vertx.groovy.core.http.HttpServer
 import io.vertx.groovy.ext.web.Router
@@ -13,20 +14,23 @@ class Application {
 
     static main(args) {
         Vertx vertx = Vertx.vertx()
-        vertx.deployVerticle(ServerVerticle.name, {
 
-            def thread = Thread.currentThread()
-            println 'Server verticle deployed'
-            println "Application.main: thread: $thread.id | $thread.name"
+        vertx.deployVerticle(HelloVerticle.name, {
+            vertx.deployVerticle(ByeVerticle.name, {
 
-            HttpServer server = vertx.createHttpServer()
+                def thread = Thread.currentThread()
+                println 'All verticles deployed'
+                println "Application.main: thread: $thread.id | $thread.name"
 
-            Router router = Router.router(vertx)
-            router.route('/hello').handler HelloHandler.create(vertx, NAME).handle
-            router.route('/bye').handler ByeHandler.create(vertx, NAME).handle
+                HttpServer server = vertx.createHttpServer()
 
-            server.requestHandler(router.&accept).listen(8080)
+                Router router = Router.router(vertx)
+                router.route('/hello').handler HelloHandler.create(vertx, NAME).handle
+                router.route('/bye').handler ByeHandler.create(vertx, NAME).handle
+
+                server.requestHandler(router.&accept).listen(8080)
+
+            })
         })
     }
-
 }

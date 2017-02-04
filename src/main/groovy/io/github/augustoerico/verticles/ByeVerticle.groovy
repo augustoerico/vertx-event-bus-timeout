@@ -11,13 +11,14 @@ import java.text.SimpleDateFormat
 class ByeVerticle extends AbstractVerticle {
 
     void start(Future future) {
-        println 'Starting Bye Verticle'
+        def thread = Thread.currentThread()
+        println "ByeVerticle.start: $thread.id | $thread.name"
 
-        def gVertx = new Vertx(vertx)
-        def threadId = Thread.currentThread().id
-        println "ByeVerticle.start: $threadId"
-
-        registerConsumer(gVertx, Channel.BYE.name(), byeHandler)
+        registerConsumer(
+                new Vertx(vertx),
+                Channel.BYE.name(),
+                byeHandler
+        )
 
         future.complete()
     }
@@ -27,10 +28,15 @@ class ByeVerticle extends AbstractVerticle {
     }
 
     def byeHandler = { Message message ->
-        def name = message.body()
-        def now = new SimpleDateFormat().format(new Date())
         def threadId = Thread.currentThread().id
         println "ByeVerticle.byeHandler: $threadId"
+
+        def name = message.body()
+        def now = new SimpleDateFormat().format(new Date())
+
+        // Let's pretend it's a resource hunger operation that takes up to 1s
+        Thread.sleep(new Random().nextInt(10) * 100)
+
         message.reply("Bye, $name at $now".toString())
     }
 
