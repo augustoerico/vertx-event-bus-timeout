@@ -28,6 +28,7 @@ class ByeVerticle extends AbstractVerticle {
     }
 
     def byeHandler = { Message message ->
+        // Same as ByeHandler.start (standard verticle)
         def threadId = Thread.currentThread().id
         println "ByeVerticle.byeHandler: $threadId"
 

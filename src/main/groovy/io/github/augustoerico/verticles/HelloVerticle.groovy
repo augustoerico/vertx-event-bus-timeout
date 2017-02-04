@@ -30,6 +30,7 @@ class HelloVerticle extends AbstractVerticle {
     }
 
     def helloHandler = { Message message ->
+        // Thread from worker pool (worker verticle)
         this.thread = Thread.currentThread()
         println "HelloVerticle.helloHandler: $thread.id"
 

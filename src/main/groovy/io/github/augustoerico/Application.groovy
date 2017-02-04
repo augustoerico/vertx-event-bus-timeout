@@ -15,20 +15,20 @@ class Application {
     static main(args) {
         Vertx vertx = Vertx.vertx()
 
-        vertx.deployVerticle(HelloVerticle.name, {
+        vertx.deployVerticle(HelloVerticle.name, [worker: true], {
             vertx.deployVerticle(ByeVerticle.name, {
 
                 def thread = Thread.currentThread()
                 println 'All verticles deployed'
                 println "Application.main: thread: $thread.id | $thread.name"
 
-                HttpServer server = vertx.createHttpServer()
-
                 Router router = Router.router(vertx)
                 router.route('/hello').handler HelloHandler.create(vertx, NAME).handle
                 router.route('/bye').handler ByeHandler.create(vertx, NAME).handle
 
-                server.requestHandler(router.&accept).listen(8080)
+                vertx.createHttpServer()
+                        .requestHandler(router.&accept)
+                        .listen(8080)
 
             })
         })
