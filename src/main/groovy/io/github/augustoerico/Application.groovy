@@ -1,15 +1,15 @@
 package io.github.augustoerico
 
-import io.github.augustoerico.services.Bye
-import io.github.augustoerico.services.Hello
+import io.github.augustoerico.handlers.ByeHandler
+import io.github.augustoerico.handlers.HelloHandler
 import io.github.augustoerico.verticles.ServerVerticle
 import io.vertx.groovy.core.Vertx
-import io.vertx.groovy.core.eventbus.Message
 import io.vertx.groovy.core.http.HttpServer
 import io.vertx.groovy.ext.web.Router
-import io.vertx.groovy.ext.web.RoutingContext
 
 class Application {
+
+    static final String NAME = 'Erico'
 
     static main(args) {
         Vertx vertx = Vertx.vertx()
@@ -19,24 +19,8 @@ class Application {
             HttpServer server = vertx.createHttpServer()
 
             Router router = Router.router(vertx)
-
-            router.route('/hello').handler({ RoutingContext context ->
-                def response = context.response()
-                response.putHeader('content-type', 'text/plain')
-
-                Hello.create(vertx).sayHello('Erico', { Message message ->
-                    response.end(message.body())
-                }, { message ->
-                    response.setStatusCode(503).end(message)
-                })
-            })
-
-            router.route('/bye').handler({ RoutingContext context ->
-                def response = context.response()
-                response.putHeader('content-type', 'text/plain')
-
-                Bye.create(vertx).sayBye('Erico', { Message message -> response.end(message.body()) })
-            })
+            router.route('/hello').handler HelloHandler.create(vertx, NAME).handle
+            router.route('/bye').handler ByeHandler.create(vertx, NAME).handle
 
             server.requestHandler(router.&accept).listen(8080)
         })

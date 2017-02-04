@@ -1,7 +1,5 @@
 package io.github.augustoerico.verticles
 
-import io.github.augustoerico.verticles.ByeVerticle
-import io.github.augustoerico.verticles.HelloVerticle
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.groovy.core.Vertx

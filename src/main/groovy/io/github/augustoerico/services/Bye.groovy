@@ -12,14 +12,16 @@ class Bye {
         this.vertx = vertx
     }
 
-    def sayBye(String name, Closure successFn) {
+    def sayBye(String name, Closure successFn, Closure failureFn) {
         vertx.eventBus().send(Channel.BYE.name(), name, { Future reply ->
             if (reply.succeeded()) {
                 def result = reply.result()
                 println 'Success'
                 successFn(result)
             } else {
-                println reply.cause().message
+                def message = reply.cause().message
+                println message
+                failureFn(message)
             }
         })
     }
