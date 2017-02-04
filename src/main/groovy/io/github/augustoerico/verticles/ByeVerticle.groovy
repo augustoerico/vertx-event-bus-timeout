@@ -1,4 +1,4 @@
-package io.github.augustoerico.api
+package io.github.augustoerico.verticles
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future

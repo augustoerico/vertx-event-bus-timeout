@@ -1,7 +1,6 @@
 package io.github.augustoerico.services
 
-import io.github.augustoerico.api.Bye
-import io.github.augustoerico.api.ByeVerticle
+import io.github.augustoerico.verticles.ByeVerticle
 import io.vertx.groovy.core.Vertx
 import spock.lang.Shared
 import spock.lang.Specification

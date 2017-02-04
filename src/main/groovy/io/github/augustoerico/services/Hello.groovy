@@ -1,5 +1,6 @@
-package io.github.augustoerico.api
+package io.github.augustoerico.services
 
+import io.github.augustoerico.verticles.Channel
 import io.vertx.core.Future
 import io.vertx.groovy.core.Vertx
 

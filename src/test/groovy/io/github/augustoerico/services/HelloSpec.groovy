@@ -1,7 +1,6 @@
 package io.github.augustoerico.services
 
-import io.github.augustoerico.api.Hello
-import io.github.augustoerico.api.HelloVerticle
+import io.github.augustoerico.verticles.HelloVerticle
 import io.vertx.groovy.core.Vertx
 import spock.lang.Shared
 import spock.lang.Specification

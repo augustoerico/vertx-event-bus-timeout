@@ -1,7 +1,8 @@
-package io.github.augustoerico.server
+package io.github.augustoerico
 
-import io.github.augustoerico.api.Bye
-import io.github.augustoerico.api.Hello
+import io.github.augustoerico.services.Bye
+import io.github.augustoerico.services.Hello
+import io.github.augustoerico.verticles.ServerVerticle
 import io.vertx.groovy.core.Vertx
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.groovy.core.http.HttpServer
