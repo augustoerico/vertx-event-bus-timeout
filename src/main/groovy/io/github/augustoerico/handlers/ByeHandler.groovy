@@ -22,6 +22,9 @@ class ByeHandler {
     }
 
     def handle = { RoutingContext context ->
+        def thread = Thread.currentThread()
+        println "ByeHandler.handle: thread: $thread.id | $thread.name"
+
         def response = context.response()
         response.putHeader('content-type', 'text/plain')
 
@@ -32,10 +35,14 @@ class ByeHandler {
     } as Handler
 
     def handleResult = { HttpServerResponse response, Message message ->
+        def thread = Thread.currentThread()
+        println "ByeHandler.handleResult: thread: $thread.id | $thread.name"
         response.end(message.body())
     }
 
     def handleError = { HttpServerResponse response, Message message ->
+        def thread = Thread.currentThread()
+        println "ByeHandler.handleError: thread: $thread.id | $thread.name"
         response.setStatusCode(503).end(message.body())
     }
 }

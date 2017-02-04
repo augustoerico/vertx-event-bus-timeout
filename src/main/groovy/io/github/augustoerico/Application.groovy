@@ -14,7 +14,10 @@ class Application {
     static main(args) {
         Vertx vertx = Vertx.vertx()
         vertx.deployVerticle(ServerVerticle.name, {
+
+            def thread = Thread.currentThread()
             println 'Server verticle deployed'
+            println "Application.main: thread: $thread.id | $thread.name"
 
             HttpServer server = vertx.createHttpServer()
 

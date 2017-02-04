@@ -13,17 +13,27 @@ class Bye {
     }
 
     def sayBye(String name, Closure successFn, Closure failureFn) {
-        vertx.eventBus().send(Channel.BYE.name(), name, { Future reply ->
-            if (reply.succeeded()) {
-                def result = reply.result()
-                println 'Success'
-                successFn(result)
-            } else {
-                def message = reply.cause().message
-                println message
-                failureFn(message)
-            }
-        })
+        vertx.eventBus().send(
+                Channel.BYE.name(),
+                name,
+                { Future reply ->
+
+                    def thread = Thread.currentThread()
+                    println 'Bye.sayBye: handling reply'
+                    println "Bye.sayBye: thread: $thread.id | $thread.name"
+
+                    if (reply.succeeded()) {
+                        def result = reply.result()
+                        println 'Bye.sayBye: success'
+                        successFn(result)
+                    } else {
+                        def message = reply.cause().message
+                        println "Bye.sayBye: failed: $message"
+                        failureFn(message)
+                    }
+
+                }
+        )
     }
 
     static Bye create(Vertx vertx) {

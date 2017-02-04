@@ -7,12 +7,15 @@ import io.vertx.groovy.core.Vertx
 class ServerVerticle extends AbstractVerticle {
 
     void start(Future future) {
-        def threadId = Thread.currentThread().id
-        println "ServerVerticle.start: $threadId"
+        def thread = Thread.currentThread()
+
+        println "ServerVerticle.start: $thread.id"
         Vertx gVertx = new Vertx(vertx)
+
         gVertx.deployVerticle(HelloVerticle.name, [worker: true], {
+            println 'ServerVerticle.start: HelloVerticle deployed'
             gVertx.deployVerticle(ByeVerticle.name, {
-                println 'Verticles deployed'
+                println 'ServerVerticle.start: ByeVerticle deployed'
                 future.complete()
             })
         })
