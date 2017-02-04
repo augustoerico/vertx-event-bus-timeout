@@ -32,7 +32,7 @@ class HelloVerticle extends AbstractVerticle {
     def helloHandler = { Message message ->
         // Thread from worker pool (worker verticle)
         this.thread = Thread.currentThread()
-        println "HelloVerticle.helloHandler: $thread.id"
+        println "HelloVerticle.helloHandler: $thread.id | $thread.name"
 
         def name = message.body()
         def now = new SimpleDateFormat().format(new Date())
